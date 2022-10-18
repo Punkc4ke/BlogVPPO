@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление автомобиля</title>
+</head>
+<body>
+<form th:action="${'/blog/addavto'}" method="post">
+  <p><input type="text" name="name" placeholder="Введите название"></p>
+  <p><input type="text" name="marka" placeholder="Введите марку"></p>
+  <p><input type="text" name="nomer" placeholder="Введите номер"></p>
+  <p><input type="text" name="probeg" placeholder="Введите пробег"></p>
+  <p><input type="text" name="horse" placeholder="Введите количесво л. с."></p>
+  <br>
+  <button type="submit">Добавить автомобиль</button>
+</form>
+</body>
+</html>

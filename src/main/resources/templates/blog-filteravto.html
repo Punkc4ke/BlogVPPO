@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Фильтрация автомобилей</title>
+</head>
+<body>
+<h2>Фильтрация автомобилей</h2>
+<form method="post" th:action="${'/blog/filter2/result2'}">
+  <input type="text" name="name">
+  <button type="submit">Найти</button>
+  <h3>Точный поиск</h3>
+  <div th:each="el : ${result}">
+    <h3 th:text="${el.name}"></h3>
+    <p th:text="${el.marka}"></p>
+    <p th:text="${el.nomer}"></p>
+    <p th:text="${el.probeg}"></p>
+    <p th:text="${el.horse}"></p>
+  </div>
+  <h3>Не точный поиск</h3>
+  <div th:each="el : ${result1}">
+    <h3 th:text="${el.name}"></h3>
+    <p th:text="${el.marka}"></p>
+    <p th:text="${el.nomer}"></p>
+    <p th:text="${el.probeg}"></p>
+    <p th:text="${el.horse}"></p>
+  </div>
+</form>
+</body>
+</html>
