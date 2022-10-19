@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Фильтрация автомобилей</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
+<content class="container d-flex flex-column align-items-center mt-4">
 <h2>Фильтрация автомобилей</h2>
 <form method="post" th:action="${'/blog/filter2/result2'}">
   <input type="text" name="name">
@@ -26,5 +28,7 @@
     <p th:text="${el.horse}"></p>
   </div>
 </form>
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>

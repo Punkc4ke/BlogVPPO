@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование автомобиля</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+<body>
+<content class="container d-flex flex-column align-items-center mt-4">
+  <h1>Редактирование автомобиля</h1>
+<div th:each="el:${avto}">
+  <form method="post">
+    <p><input type="text" th:value="${el.name}" name="name" placeholder="Введите название"></p>
+    <p><input type="text" th:value="${el.marka}" name="marka" placeholder="Введите марку"></p>
+    <p><input type="text" th:value="${el.nomer}" name="nomer" placeholder="Введите номер"></p>
+    <p><input type="text" th:value="${el.probeg}" name="probeg" placeholder="Введите пробег"></p>
+    <p><input type="text" th:value="${el.horse}" name="horse" placeholder="Введите количество л.с"></p>
+    <br>
+    <p><button type="submit">Сохранить изменения</button></p>
+  </form>
+</div>
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
+</body>
+</html>

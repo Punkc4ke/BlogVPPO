@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Фильтрация пользователей</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
+<content class="container d-flex flex-column align-items-center mt-4">
 <h2>Фильтрация пользователей</h2>
+
 <form method="post" th:action="${'/blog/filter1/result1'}">
   <input type="text" name="login">
   <button type="submit">Найти</button>
@@ -26,7 +29,7 @@
     <p th:text="${el.iq}"></p>
   </div>
 </form>
-
-
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>

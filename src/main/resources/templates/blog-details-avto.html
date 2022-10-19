@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Подробнее про автомобиль</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+<body>
+<content class="container d-flex flex-column align-items-center mt-4">
+  <h1>Подробнее про автомобиль</h1>
+<div th:each="el:${avto}">
+  <h3>Подробнее про автомобиль</h3>
+  <h3 th:text="${el.name}"></h3>
+  <p th:text="${el.marka}"></p>
+  <p th:text="${el.nomer}"></p>
+  <p th:text="${el.probeg}"></p>
+  <p th:text="${el.horse}"></p>
+  <a th:href="'/blog/avto/' + ${el.id}  + '/edit'">Редактировать</a>
+  <form th:action="'/blog/avto/' + ${el.id} + '/remove'" method="post">
+    <button type="submit" class="btn btn-del">Удалить</button>
+  </form>
+</div>
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
+</body>
+</html>

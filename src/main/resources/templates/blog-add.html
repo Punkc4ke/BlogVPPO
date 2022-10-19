@@ -3,14 +3,19 @@
 <head>
   <title>Добавление новой статьи</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
+<content class="container d-flex flex-column align-items-center mt-4">
+  <h1>Добавление новой статьи<</h1>
 <form th:action="${'/blog/add'}" method="post">
-  <input type="text" name="title" placeholder="Введите название статьи">
-  <input type="text" name="anons" placeholder="Введите анос статьи">
-  <textarea name="full_text" placeholder="Введите текст статьи"></textarea>
+  <p><input type="text" name="title" placeholder="Введите название статьи"></p>
+  <p><input type="text" name="anons" placeholder="Введите анос статьи"></p>
+  <p><textarea name="full_text" placeholder="Введите текст статьи"></textarea></p>
   <br>
-  <button type="submit">Добавить статью</button>
+  <p><button type="submit">Добавить статью</button></p>
 </form>
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>

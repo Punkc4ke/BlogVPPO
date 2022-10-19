@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Добавление автомобиля</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
+<content class="container d-flex flex-column align-items-center mt-4">
+    <h1>Добавление автомобиля</h1>
 <form th:action="${'/blog/addavto'}" method="post">
   <p><input type="text" name="name" placeholder="Введите название"></p>
   <p><input type="text" name="marka" placeholder="Введите марку"></p>
@@ -14,5 +17,7 @@
   <br>
   <button type="submit">Добавить автомобиль</button>
 </form>
+</content>
+<script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>

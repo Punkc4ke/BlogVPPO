@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Подробнее про статью</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
 </head>
 <body>
+<content class="container d-flex flex-column align-items-center mt-4">
+    <h1>Подробнее про статью</h1>
     <div th:each="el:${post}">
       <h3>Подробнее про статью</h3> <h3 th:text="${el.title}"></h3>
       <p th:text="${el.anons}"></p>
@@ -14,5 +17,7 @@
         <button type="submit" class="btn btn-del">Удалить</button>
       </form>
     </div>
+</content>
+    <script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>
