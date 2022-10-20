@@ -8,18 +8,50 @@
 <body>
 <content class="container d-flex flex-column align-items-center mt-4">
   <h2>Редактирование пользователей</h2>
+  <form method="post" th:action="${'/blog/user/{id}/edit'}" th:object="${user}">
+    <input type="hidden" th:field="*{id}" th:value="${user.id}">
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Логин</label>
+      <div class="col-sm-10">
+        <input type="text"  th:field="*{login}" class="form-control" th:value="${user.login}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></span>
+    </div>
 
-<div th:each="el:${user}">
-  <form method="post">
-    <p><input type="text" th:value="${el.login}" name="login" placeholder="Введите логин"></p>
-    <p><input type="text" th:value="${el.password}" name="password" placeholder="Введите пароль"></p>
-    <p><input type="text" th:value="${el.email}" name="email" placeholder="Введите email"></p>
-    <p><input type="text" th:value="${el.age}" name="age" placeholder="Введите возраст"></p>
-    <p><input type="text" th:value="${el.iq}" name="iq" placeholder="Введите IQ"></p>
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Пароль</label>
+      <div class="col-sm-10">
+        <input type="text"  th:field="*{password}" class="form-control" th:value="${user.password}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-10">
+        <input type="text"  th:field="*{email}" class="form-control" th:value="${user.email}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Возраст</label>
+      <div class="col-sm-10">
+        <input type="number"  th:field="*{age}" class="form-control" th:value="${user.age}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">IQ</label>
+      <div class="col-sm-10">
+        <input type="number"  th:field="*{iq}" class="form-control" th:value="${user.iq}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('iq')}" th:errors="*{iq}"></span>
+    </div>
     <br>
     <p><button type="submit">Сохранить изменения</button></p>
   </form>
-</div>
 </content>
 <script th:src="@{/css/bootstrap.js}"></script>
 </body>

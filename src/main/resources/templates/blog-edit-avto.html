@@ -8,17 +8,51 @@
 <body>
 <content class="container d-flex flex-column align-items-center mt-4">
   <h1>Редактирование автомобиля</h1>
-<div th:each="el:${avto}">
-  <form method="post">
-    <p><input type="text" th:value="${el.name}" name="name" placeholder="Введите название"></p>
-    <p><input type="text" th:value="${el.marka}" name="marka" placeholder="Введите марку"></p>
-    <p><input type="text" th:value="${el.nomer}" name="nomer" placeholder="Введите номер"></p>
-    <p><input type="text" th:value="${el.probeg}" name="probeg" placeholder="Введите пробег"></p>
-    <p><input type="text" th:value="${el.horse}" name="horse" placeholder="Введите количество л.с"></p>
+  <form method="post" th:action="${'/blog/avto/{id}/edit'}" th:object="${avto}">
+    <input type="hidden" th:field="*{id}" th:value="${avto.id}">
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Название</label>
+      <div class="col-sm-10">
+        <input type="text"  th:field="*{name}" class="form-control" th:value="${avto.name}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Марка</label>
+      <div class="col-sm-10">
+        <input type="text"  th:field="*{marka}" class="form-control" th:value="${avto.marka}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('marka')}" th:errors="*{marka}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Номер</label>
+      <div class="col-sm-10">
+        <input type="text" th:field="*{nomer}" class="form-control" th:value="${avto.nomer}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('nomer')}" th:errors="*{nomer}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Пробег</label>
+      <div class="col-sm-10">
+        <input type="number" th:field="*{probeg}" class="form-control" th:value="${avto.probeg}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('probeg')}" th:errors="*{probeg}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+      <label class="col-sm-2 col-form-label">Количество л. с.</label>
+      <div class="col-sm-10">
+        <input type="number" th:field="*{horse}" class="form-control" th:value="${avto.horse}">
+      </div>
+      <span class="error text-danger" th:if="${#fields.hasErrors('horse')}" th:errors="*{horse}"></span>
+    </div>
     <br>
     <p><button type="submit">Сохранить изменения</button></p>
   </form>
-</div>
 </content>
 <script th:src="@{/css/bootstrap.js}"></script>
 </body>

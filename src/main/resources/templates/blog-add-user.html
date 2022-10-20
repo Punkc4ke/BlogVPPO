@@ -1,18 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <title>Создание пользователя</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+
 </head>
 <body>
 <content class="container d-flex flex-column align-items-center mt-4">
-<form th:action="${'/blog/adduser'}" method="post">
-  <p><input type="text" name="login" placeholder="Введите логин"></p>
-  <p><input type="text" name="password" placeholder="Введите пароль"></p>
-  <p><input type="text" name="email" placeholder="Введите email"></p>
-  <p><input type="text" name="age" placeholder="Введите возраст"></p>
-  <p><input type="text" name="iq" placeholder="Введите IQ"></p>
+<form th:action="${'/blog/adduser'}" method="post" th:object="${user}">
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Логин</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{login}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Пароль</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{password}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{email}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Возраст</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{age}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">IQ</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{iq}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('iq')}" th:errors="*{iq}"></span>
+    </div>
   <br>
   <button type="submit">Добавить пользователя</button>
 </form>

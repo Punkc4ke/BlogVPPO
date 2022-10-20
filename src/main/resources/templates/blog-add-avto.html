@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Добавление автомобиля</title>
@@ -8,12 +8,43 @@
 <body>
 <content class="container d-flex flex-column align-items-center mt-4">
     <h1>Добавление автомобиля</h1>
-<form th:action="${'/blog/addavto'}" method="post">
-  <p><input type="text" name="name" placeholder="Введите название"></p>
-  <p><input type="text" name="marka" placeholder="Введите марку"></p>
-  <p><input type="text" name="nomer" placeholder="Введите номер"></p>
-  <p><input type="text" name="probeg" placeholder="Введите пробег"></p>
-  <p><input type="text" name="horse" placeholder="Введите количесво л. с."></p>
+<form th:action="${'/blog/addavto'}" method="post"  th:object="${avto}">
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Название</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{name}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Марка</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{marka}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('marka')}" th:errors="*{marka}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Номер</label>
+        <div class="col-sm-10">
+            <input type="text"  th:field="*{nomer}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('nomer')}" th:errors="*{nomer}"></span>
+    </div>
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Пробег</label>
+        <div class="col-sm-10">
+            <input type="number"  th:field="*{probeg}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('probeg')}" th:errors="*{probeg}"></span>
+    </div>
+
+    <div class="form-group row mt-3">
+        <label class="col-sm-2 col-form-label">Количество л. с.</label>
+        <div class="col-sm-10">
+            <input type="number"  th:field="*{horse}" class="form-control">
+        </div>
+        <span class="error text-danger" th:if="${#fields.hasErrors('horse')}" th:errors="*{horse}"></span>
+    </div>
   <br>
   <button type="submit">Добавить автомобиль</button>
 </form>

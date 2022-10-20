@@ -1,15 +1,15 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Avto;
+import com.example.demo.models.User;
 import com.example.demo.repo.AvtoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,21 +29,21 @@ public class AvtoController {
     }
 
     @GetMapping("/blog/addavto")
-    public String blogAdd(Model model)
+    public String blogAdd(Avto avto, Model model)
     {
         return "blog-add-avto";
     }
 
     @PostMapping("/blog/addavto")
-    public String blogAvtoAdd(@RequestParam String name,
-                              @RequestParam String marka,
-                              @RequestParam String nomer,
-                              @RequestParam Double probeg,
-                              @RequestParam Integer horse, Model model)
+    public String blogAvtoAdd(@ModelAttribute("avto") @Valid Avto avto, BindingResult bindingResult,
+                              Model model)
     {
-        Avto avto = new Avto(name, marka, nomer, probeg, horse);
+        if(bindingResult.hasErrors()) {
+            return "blog-add-avto";
+        }
         avtoRepository.save(avto);
-        return "redirect:/";
+
+        return "redirect:/avto";
     }
 
     @GetMapping("/blog/filter2")
@@ -78,31 +78,28 @@ public class AvtoController {
 
     @GetMapping("/blog/avto/{id}/edit")
     public String blogAvtoEdit(@PathVariable("id") long id, Model model){
-        Optional<Avto> avto = avtoRepository.findById(id);
-        ArrayList<Avto> res = new ArrayList<>();
-        avto.ifPresent(res::add);
-        model.addAttribute("avto", res);
-        if(!avtoRepository.existsById(id)){
-            return "redirect:/blog";
+        if (!avtoRepository.existsById(id)) {
+            return "redirect:/";
         }
+        Avto avto = avtoRepository.findById(id).get();
+        model.addAttribute("avto", avto);
         return  "blog-edit-avto";
     }
 
     @PostMapping("/blog/avto/{id}/edit")
-    public String blogAvtoUpdate(@PathVariable("id")long id,
-                                 @RequestParam String name,
-                                 @RequestParam String marka,
-                                 @RequestParam String nomer,
-                                 @RequestParam Double probeg,
-                                 @RequestParam Integer horse,
+    public String blogAvtoUpdate(@ModelAttribute("avto") @Valid Avto avto, BindingResult bindingResult,
+
                                  Model model)
     {
-        Avto avto = avtoRepository.findById(id).orElseThrow();
-        avto.setName(name);
-        avto.setMarka(marka);
-        avto.setNomer(nomer);
-        avto.setProbeg(probeg);
-        avto.setHorse(horse);
+        if (bindingResult.hasErrors()) {
+            return "blog-edit-avto";
+        }
+        avto= avtoRepository.findById(avto.getId()).get();
+        avto.setName(avto.getName());
+        avto.setMarka(avto.getName());
+        avto.setNomer(avto.getNomer());
+        avto.setProbeg(avto.getProbeg());
+        avto.setHorse(avto.getHorse());
         avtoRepository.save(avto);
         return "redirect:/";
     }
