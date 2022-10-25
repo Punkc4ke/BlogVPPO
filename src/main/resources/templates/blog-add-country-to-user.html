@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<form th:action="${'/user/add-country/'}" method="post" >
+  <select name="user">
+    <div th:each="element : ${users}">
+      <option th:text="${element.login}"></option>
+    </div>
+  </select>
+  <select name="countries">
+    <div th:each="element : ${countries}">
+      <option th:text="${element.name}"></option>
+    </div>
+  </select>
+  <br>
+  <button type="submit">Добавить страну</button>
+</form>
+</body>
+</html>

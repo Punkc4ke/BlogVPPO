@@ -2,6 +2,8 @@ package com.example.demo.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -13,6 +15,7 @@ public class User {
 
     @NotBlank(message = "Поле обязательно к заполнению")
     @Size(min = 4, max = 16, message = "Поле должно быть размером от 6 до 20 символов")
+    @Column
     private String login;
 
     @NotBlank(message = "Поле обязательно к заполнению")
@@ -35,18 +38,33 @@ public class User {
     @NotNull(message = "Поле не должно быть пустым")
     private Integer iq;
 
-    public User() {
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="role_id")
+    private Role role;
 
-    }
-    public User(String login, String password, String email, Integer age, Integer iq) {
+    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
+    private Collection<Avto> cars;
+
+    @ManyToMany
+    @JoinTable (name="user_country",
+            joinColumns=@JoinColumn(name="user_id"),
+            inverseJoinColumns=@JoinColumn(name="country_id"))
+    private List<Country> countries;
+
+
+    public User(String login, String password, String email, Integer age, Integer iq, Role role, List<Country> countries) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.age = age;
         this.iq = iq;
+        this.countries = countries;
+
     }
 
+    public User() {
 
+    }
 
     public Long getId() {
         return id;
@@ -94,6 +112,30 @@ public class User {
 
     public void setIq(Integer iq) {
         this.iq = iq;
+    }
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Collection<Avto> getCars() {
+        return cars;
+    }
+
+    public void setCars(Collection<Avto> cars) {
+        this.cars = cars;
+    }
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
     }
 
 

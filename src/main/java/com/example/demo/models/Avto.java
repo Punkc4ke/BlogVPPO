@@ -44,6 +44,9 @@ public class Avto {
     @NotNull(message = "Поле не должно быть пустым")
     private Integer horse;
 
+    @ManyToOne(optional = true, cascade = CascadeType.ALL)
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -90,6 +93,14 @@ public class Avto {
 
     public void setHorse(Integer horse) {
         this.horse = horse;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
