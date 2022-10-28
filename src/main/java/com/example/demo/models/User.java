@@ -3,23 +3,26 @@ package com.example.demo.models;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "user")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank(message = "Поле обязательно к заполнению")
-    @Size(min = 4, max = 16, message = "Поле должно быть размером от 6 до 20 символов")
+    @Size(min = 4, max = 20, message = "Поле должно быть размером от 6 до 20 символов")
     @Column
-    private String login;
+    private String username;
 
     @NotBlank(message = "Поле обязательно к заполнению")
-    @Size(min = 8, max = 16, message = "Поле должно быть размером от 6 до 20 символов")
+    //@Size(min = 8, max = 16, message = "Поле должно быть размером от 6 до 20 символов")
     private String password;
 
     @NotBlank(message = "Поле обязательно к заполнению")
@@ -38,9 +41,14 @@ public class User {
     @NotNull(message = "Поле не должно быть пустым")
     private Integer iq;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="role_id")
-    private Role role;
+    private boolean active;
+
+    private boolean admin;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role",joinColumns = @JoinColumn(name="user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
     private Collection<Avto> cars;
@@ -52,12 +60,13 @@ public class User {
     private List<Country> countries;
 
 
-    public User(String login, String password, String email, Integer age, Integer iq, Role role, List<Country> countries) {
-        this.login = login;
+    public User(String username, String password, String email, Integer age, Integer iq, Role roles ,List<Country> countries) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.age = age;
         this.iq = iq;
+        this.roles = Collections.singleton(roles);
         this.countries = countries;
 
     }
@@ -74,12 +83,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -114,14 +123,6 @@ public class User {
         this.iq = iq;
     }
 
-    public Role getRole() {
-        return this.role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public Collection<Avto> getCars() {
         return cars;
     }
@@ -138,5 +139,53 @@ public class User {
         this.countries = countries;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
 }

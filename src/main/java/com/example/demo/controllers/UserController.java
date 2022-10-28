@@ -2,11 +2,11 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.Avto;
 import com.example.demo.models.Role;
-import com.example.demo.repo.AvtoRepository;
-import com.example.demo.repo.RoleRepository;
 import com.example.demo.repo.UserRepository;
+import com.example.demo.repo.AvtoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.models.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,19 +15,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Controller
+@RequestMapping("/user")
+@PreAuthorize("hasAnyAuthority('USER')")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private AvtoRepository avtoRepository;
@@ -43,52 +41,44 @@ public class UserController {
     @GetMapping("/blog/adduser")
     public String blogAdd(User user,Model model)
     {
-
-        Iterable<Role> role = roleRepository.findAll();
         Iterable<Avto> avto = avtoRepository.findAll();
-//        Role role = roleRepository.findById(role_id).get();
-//        user.setRole(role);
         model.addAttribute("avto", avto);
-        model.addAttribute("role", role);
         model.addAttribute("user", user);
         return "blog-add-user";
     }
 
     @PostMapping("/blog/adduser")
-    public String blogUserAdd(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @Valid Role role,
+    public String blogUserAdd(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                               Model model)
     {
 
         if(bindingResult.hasErrors()) {
             return "blog-add-user";
         }
-        System.out.println(user.getRole());
-        user.setLogin(user.getLogin());
+        user.setUsername(user.getUsername());
         user.setPassword(user.getPassword());
         user.setEmail(user.getEmail());
         user.setAge(user.getAge());
         user.setIq(user.getIq());
-        user.setRole(user.getRole());
+
         userRepository.save(user);
-
-
 
         return "redirect:/user";
     }
 
     @GetMapping("/blog/filter1")
-    public String blogUserFilter(Model model)
+    public String blogUserFilter(User user, Model model)
     {
         return "blog-filter-user";
     }
 
     @PostMapping("/blog/filter1/result1")
-    public String blogUserResult(@RequestParam String login, Model model)
+    public String blogUserResult(@RequestParam String username, Model model)
     {
 
-        List<User> result = userRepository.findByLoginLike(login);
+        List<User> result = userRepository.findByUsernameLike(username);
         model.addAttribute("result", result);
-        List<User> result1 = userRepository.findByLoginContains(login);
+        List<User> result1 = userRepository.findByUsernameContains(username);
         model.addAttribute("result1", result1);
 
         return "blog-filter-user";
@@ -97,11 +87,9 @@ public class UserController {
     @GetMapping("/blog/user/{id}")
     public String blogUserDetails(@PathVariable(value = "id") long id, Model model){
         Optional<User> user = userRepository.findById(id);
-        Iterable<Role> role = roleRepository.findAll();
         ArrayList<User> res = new ArrayList<>();
         user.ifPresent(res::add);
         model.addAttribute("user", res);
-        model.addAttribute("role", role);
         if(!userRepository.existsById(id))
         {
             return "redirect:/blog";
@@ -109,21 +97,19 @@ public class UserController {
         return  "blog-details-user";
     }
 
-    @GetMapping("/blog/user/{id}/edit")
+    @GetMapping("blog/user/{id}/edit")
     public String blogUserEdit(@PathVariable("id") long id, Model model){
         if (!userRepository.existsById(id)) {
             return "redirect:/";
         }
-        Iterable<Role> role = roleRepository.findAll();
         User user = userRepository.findById(id).get();
-        model.addAttribute("role", role);
         model.addAttribute("user", user);
         return  "blog-edit-user";
     }
 
-    @PostMapping("/blog/user/{id}/edit")
-    public String blogUserUpdate( @ModelAttribute("user") @Valid User user, BindingResult bindingResult, @Valid Role role,
-                                 @RequestParam String login,
+    @PostMapping("blog/user/{id}/edit")
+    public String blogUserUpdate( @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                 @RequestParam String username,
                                  @RequestParam String password,
                                  @RequestParam String email,
                                  @RequestParam Integer age,
@@ -134,14 +120,12 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "blog-edit-user";
         }
-        System.out.println(user.getRole());
         user= userRepository.findById(user.getId()).get();
-        user.setLogin(user.getLogin());
+        user.setUsername(user.getUsername());
         user.setPassword(user.getPassword());
         user.setEmail(user.getEmail());
         user.setAge(user.getAge());
         user.setIq(user.getIq());
-        user.setRole(user.getRole());
         userRepository.save(user);
         return "redirect:/";
     }
@@ -152,4 +136,38 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/";
     }
+
+//    @GetMapping
+//    public String userList(Model model){
+//        model.addAttribute("users", userRepository.findAll());
+//        return "blog-filter-user";
+//    }
+//
+//    // Доп код
+//
+//    @GetMapping("/{id}/edit")
+//    public String userEdit(@PathVariable(value = "id") long id, Model model){
+//        Optional<User> user = userRepository.findById(id);
+//        ArrayList<User> res = new ArrayList<>();
+//        user.ifPresent(res::add);
+//        model.addAttribute("user", res);
+//        model.addAttribute("roles", Role.values());
+//        return "blog-edit-user";
+//    }
+//
+//    @PostMapping
+//    public String userSave(@RequestParam String username,
+//                           @RequestParam(name="roles[]", required = false) String[] roles,
+//                           @RequestParam("userId") User user){
+//        user.setUsername(username);
+//        user.getRoles().clear();
+//        if(roles!=null)
+//        {
+//            Arrays.stream(roles).forEach(r->user.getRoles().add(Role.valueOf(r)));
+//        }
+//        userRepository.save(user);
+//
+//        return "redirect:/admin";
+//    }
+
 }

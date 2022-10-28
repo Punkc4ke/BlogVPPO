@@ -2,8 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.Country;
 import com.example.demo.models.User;
-import com.example.demo.repo.CountryRepository;
 import com.example.demo.repo.UserRepository;
+import com.example.demo.repo.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +32,7 @@ public class CountryController {
     @PostMapping("/user/add-country")
     public String blogPostAdd(@RequestParam String user, @RequestParam String countries, Model model)
     {
-        User user2 = userRepository.findByLogin(user);
+        User user2 = userRepository.findByUsername(user);
         Country country2 = countryRepository.findByName(countries);
         user2.getCountries().add(country2);
         country2.getUser().add(user2);

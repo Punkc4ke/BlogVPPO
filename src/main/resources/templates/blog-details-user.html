@@ -9,12 +9,13 @@
 <content class="container d-flex flex-column align-items-center mt-4">
 <div th:each="el:${user}">
   <h3>Подробнее про пользователя</h3>
-  <h3 th:text="${el.login}"></h3>
+  <h3 th:text="${el.username}"></h3>
   <p th:text="${el.password}"></p>
   <p th:text="${el.email}"></p>
   <p th:text="${el.age}"></p>
   <p th:text="${el.iq}"></p>
-  <a th:href="'/blog/user/' + ${el.id}  + '/edit'">Редактировать</a>
+  <a th:href="'/rolesControl/blog/user/' + ${el.id} + '/edit'">Редактировать</a>
+  <a th:href="'/rolesControl'">Назад</a>
   <form th:action="'/blog/user/' + ${el.id} + '/remove'" method="post">
     <button type="submit" class="btn btn-del">Удалить</button>
   </form>

@@ -1,8 +1,14 @@
 package com.example.demo.controllers;
 
+import com.example.demo.models.Role;
+import com.example.demo.models.User;
+import com.example.demo.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.repo.PostRepository;
 import com.example.demo.models.Post;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +20,37 @@ import java.util.Optional;
 public class BlogController  {
     @Autowired
     private PostRepository postRepository;
-    @GetMapping("/")
 
-    public String blogMain(Model model)
-    {
-        Iterable<Post> posts = postRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/")
+    public String getMainPage(@AuthenticationPrincipal User currentUser,
+                              @RequestParam(required = false) String title,
+                              @RequestParam(required = false) Boolean exactSearch, Model model) {
+
+        Iterable<Post> posts = new ArrayList<Post>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(authentication.getName());
+        model.addAttribute("userName", user.getUsername());
+        if (user.getRoles().contains(Role.ADMIN))
+            model.addAttribute("isAdmin", true);
+        else
+            model.addAttribute("isAdmin", false);
+
+        if (title != null && title != "") {
+            if (exactSearch != null && exactSearch == true)
+                posts = postRepository.findByTitle(title);
+            else
+                posts = postRepository.findByTitleContains(title);
+        } else
+            posts = postRepository.findAll();
+
         model.addAttribute("posts", posts);
+
         return "blog-main";
+
     }
 
    @GetMapping("/blog/add")

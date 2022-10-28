@@ -6,8 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
+    
+    List<User> findByUsernameLike(String username);
+    List<User> findByUsernameContains(String username);
+    User findByUsername(String username);
 
-    List<User> findByLoginLike(String login);
-    List<User> findByLoginContains(String login);
-     User findByLogin(String login);
+    Iterable<User> findAllByUsernameNot(String username);
 }

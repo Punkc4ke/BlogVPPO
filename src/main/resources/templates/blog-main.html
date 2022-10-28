@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -22,7 +22,7 @@
     <a th:href="'/blog/' + ${el.id}">Подробнее</a>
 </div>
 <div th:each="el : ${users}">
-    <h3 th:text="${el.login}"></h3>
+    <h3 th:text="${el.username}"></h3>
     <br>
     <a th:href="'/blog/user/' + ${el.id}">Подробнее</a>
 </div>
@@ -31,6 +31,7 @@
     <br>
     <a th:href="'/blog/avto/' + ${el.id}">Подробнее</a>
 </div>
+</content>
 <script th:src="@{/css/bootstrap.js}"></script>
 </body>
 </html>

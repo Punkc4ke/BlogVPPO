@@ -10,11 +10,11 @@
 <h2>Фильтрация пользователей</h2>
 
 <form method="post" th:action="${'/blog/filter1/result1'}">
-  <input type="text" name="login">
+  <input type="text" name="username">
   <button type="submit">Найти</button>
   <div th:each="el : ${result}">
     <h3>Точный поиск</h3>
-    <h3 th:text="${el.login}"></h3>
+    <h3 th:text="${el.username}"></h3>
     <p th:text="${el.password}"></p>
     <p th:text="${el.email}"></p>
       <p th:text="${el.age}"></p>
@@ -22,7 +22,7 @@
   </div>
   <h3>Не точный поиск</h3>
   <div th:each="el : ${result1}">
-    <h3 th:text="${el.login}"></h3>
+    <h3 th:text="${el.username}"></h3>
     <p th:text="${el.password}"></p>
     <p th:text="${el.email}"></p>
     <p th:text="${el.age}"></p>

@@ -1,13 +1,18 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Avto;
+import com.example.demo.models.Role;
 import com.example.demo.models.User;
 import com.example.demo.repo.AvtoRepository;
+import com.example.demo.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.models.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -19,6 +24,16 @@ public class AvtoController {
 
     @Autowired
     private AvtoRepository avtoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public User getAuthUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(authentication.getName());
+
+        return user;
+    }
 
     @GetMapping("/avto")
     public String blogAvtoMain(Model model)
@@ -77,12 +92,28 @@ public class AvtoController {
     }
 
     @GetMapping("/blog/avto/{id}/edit")
-    public String blogAvtoEdit(@PathVariable("id") long id, Model model){
+    public String blogAvtoEdit(@RequestParam(required = false) String text,
+                               @PathVariable("id") long id, Model model){
         if (!avtoRepository.existsById(id)) {
             return "redirect:/";
         }
         Avto avto = avtoRepository.findById(id).get();
         model.addAttribute("avto", avto);
+
+        if (getAuthUser().getRoles().contains(Role.ADMIN))
+            model.addAttribute("isAdmin", true);
+        else
+            model.addAttribute("isAdmin", false);
+
+        if (getAuthUser().getRoles().contains(Role.AVTO_MODERATOR))
+            model.addAttribute("isFishModerator", true);
+        else
+            model.addAttribute("isFishModerator", false);
+
+        if (avto.getUser().equals(getAuthUser()))
+            model.addAttribute("entitled", true);
+        else
+            model.addAttribute("entitled", false);
         return  "blog-edit-avto";
     }
 
